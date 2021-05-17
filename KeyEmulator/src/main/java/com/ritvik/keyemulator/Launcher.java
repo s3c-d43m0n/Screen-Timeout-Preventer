@@ -195,7 +195,12 @@ public class Launcher extends javax.swing.JFrame {
             else{
                 
                 vButton.setText(START);
-                this.setOpacity(0.9f);
+                try{
+                    this.setOpacity(0.9f);
+                }
+                catch(Exception e){
+                    System.err.println("Unable to update Opacity for Window");
+                }
                 vTimer.setText(vSec+"");
                 vTimer.setEnabled(true);
                 started=false;
