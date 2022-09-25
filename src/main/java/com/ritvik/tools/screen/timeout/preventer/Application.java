@@ -1,6 +1,5 @@
 package com.ritvik.tools.screen.timeout.preventer;
 
-import com.ritvik.tools.screen.timeout.preventer.config.Configuration;
 import com.ritvik.tools.screen.timeout.preventer.gui.UserInterface;
 import com.ritvik.tools.screen.timeout.preventer.service.BackendService;
 
