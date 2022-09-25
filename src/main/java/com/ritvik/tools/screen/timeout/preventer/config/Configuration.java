@@ -1,60 +1,66 @@
 package com.ritvik.tools.screen.timeout.preventer.config;
 
 import com.ritvik.tools.screen.timeout.preventer.utils.Constants;
-import lombok.Data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.util.logging.Logger;
 
-@Data
-public class Configuration implements AutoCloseable{
-    private File configFile;
+public class Configuration{
+    private final File configFile;
     private int timeout;
-    private FileLock configFileLock;
 
-    public Configuration(){
-        configFile = new File(System.getProperty(Constants.HOME_DIR), Constants.CONFIG_FILE);
-
-        //Checking if new config file is needed
-        if(!configFile.exists()){
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile)))){
-                writer.write(Constants.DEFAULT_TIMEOUT);
-                writer.flush();
-            } catch (IOException e){
-                //:TODO Logging
-                System.exit(-1);
-            }
-        }
-
-        //Reading timeout value from config file
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile)))){
-            timeout = Integer.parseInt(reader.readLine());
-        } catch (IOException e) {
-            //:TODO Logging
-            System.exit(-1);
-        }
-
-        //Acquiring process level lock on config file
-        try(RandomAccessFile randomAccessFile = new RandomAccessFile(configFile,"rw")){
-            configFileLock = randomAccessFile.getChannel().tryLock();
-        } catch (IOException e) {
-            //:TODO Logging
+    private static final Logger log = Logger.getLogger(Configuration.class.getName());
+    private static Configuration configurationInstance;
+    static{
+        try {
+            configurationInstance = new Configuration();
+        } catch (Exception e){
+            e.printStackTrace();
             System.exit(-1);
         }
     }
 
-    @Override
-    public void close() throws Exception {
-        if(configFile!=null){
-            configFileLock.release();
+    public static Configuration getConfig() {
+        return configurationInstance;
+    }
+
+    public Configuration() throws IOException {
+        configFile = new File(System.getProperty(Constants.HOME_DIR), Constants.CONFIG_FILE);
+
+        //Checking if new config file is needed
+        if(!configFile.exists()){
+            log.info("Config file not present : "+configFile.getAbsolutePath());
+            updateConfig(Constants.DEFAULT_TIMEOUT);
+        } else {
+            readConfig();
         }
+
+        //Acquiring process level lock on config file
+        new RandomAccessFile(configFile,"rw").getChannel().tryLock();
+    }
+
+    private void readConfig() throws IOException {
+        log.info("Reading timeout value from config file");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(configFile.toPath())));
+        timeout = Integer.parseInt(reader.readLine());
+    }
+
+    public void updateConfig(String timeoutValue) throws IOException {
+        log.info("Writing timeout value "+timeoutValue+"to config file");
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(configFile.toPath())));
+        writer.write(timeoutValue);
+        writer.flush();
+        readConfig();
+    }
+
+    public int getTimeout() {
+        return timeout;
     }
 }
