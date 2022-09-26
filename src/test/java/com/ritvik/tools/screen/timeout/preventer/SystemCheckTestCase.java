@@ -14,16 +14,17 @@ public class SystemCheckTestCase {
     }
 
     private boolean isRobotSupported() {
-        try{
+        if(System.getProperty("os.name").startsWith("Windows")) try{
             new Robot().keyPress(KeyEvent.VK_F23);
             return true;
         } catch (Exception e){
             return false;
         }
+        else return true;
     }
 
     @Test
     public void systemTray(){
-        assertTrue(SystemTray.isSupported());
+        if(System.getProperty("os.name").startsWith("Windows")) assertTrue(SystemTray.isSupported());
     }
 }
