@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.ritvik.tools'
-version '1.0'
+version 'SNAPSHOT'
 
 repositories {
     mavenCentral()
