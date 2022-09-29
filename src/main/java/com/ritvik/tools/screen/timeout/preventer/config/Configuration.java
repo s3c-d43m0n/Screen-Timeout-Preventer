@@ -1,7 +1,6 @@
 package com.ritvik.tools.screen.timeout.preventer.config;
 
 import com.ritvik.tools.screen.timeout.preventer.utils.Constants;
-import sun.security.action.GetPropertyAction;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,7 +43,7 @@ public class Configuration{
         }
 
         //Acquiring process level lock on temp file
-        new RandomAccessFile(new File(GetPropertyAction.privilegedGetProperty("java.io.tmpdir"),Constants.TEMP_FILE),"rw").getChannel().tryLock();
+        new RandomAccessFile(new File(System.getProperty("java.io.tmpdir"),Constants.TEMP_FILE),"rw").getChannel().tryLock();
     }
 
     private void readConfig() throws IOException {
