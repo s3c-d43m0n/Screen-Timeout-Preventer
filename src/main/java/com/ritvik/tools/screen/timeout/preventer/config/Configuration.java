@@ -41,16 +41,17 @@ public class Configuration{
         } else {
             readConfig();
         }
-
-        //Acquiring process level lock on temp file
-        new RandomAccessFile(new File(System.getProperty("java.io.tmpdir"),Constants.TEMP_FILE),"rw").getChannel().tryLock();
     }
 
     private void readConfig() throws IOException {
         log.info("Reading timeout value from config file");
         BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(configFile.toPath())));
-        timeout = Integer.parseInt(reader.readLine());
-        reader.close();
+        try {
+            timeout = Integer.parseInt(reader.readLine());
+            reader.close();
+        } catch (NumberFormatException e){
+            updateConfig(Constants.DEFAULT_TIMEOUT);
+        }
     }
 
     public void updateConfig(String timeoutValue) throws IOException {
