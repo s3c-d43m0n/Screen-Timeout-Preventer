@@ -34,21 +34,19 @@ public class Menu extends PopupMenu {
                         Configuration.getConfig().updateConfig(value);
                     } catch (NumberFormatException ex){
                         log.warning(ex.getLocalizedMessage());
-                        JOptionPane.showConfirmDialog(
+                        JOptionPane.showMessageDialog(
                             null,
                             "Please Enter Again",
                             "Invalid value entered",
-                            JOptionPane.OK_OPTION,
                             JOptionPane.ERROR_MESSAGE,
                             icon
                         );
                     } catch (IOException ex) {
                         log.warning(ex.getLocalizedMessage());
-                        JOptionPane.showConfirmDialog(
+                        JOptionPane.showMessageDialog(
                                 null,
                                 ex.getLocalizedMessage(),
                                 "Exception Occurred",
-                                JOptionPane.OK_OPTION,
                                 JOptionPane.ERROR_MESSAGE,
                                 icon
                         );

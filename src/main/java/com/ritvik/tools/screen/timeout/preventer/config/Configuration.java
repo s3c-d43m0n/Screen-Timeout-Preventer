@@ -1,6 +1,7 @@
 package com.ritvik.tools.screen.timeout.preventer.config;
 
 import com.ritvik.tools.screen.timeout.preventer.utils.Constants;
+import sun.security.action.GetPropertyAction;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,14 +43,15 @@ public class Configuration{
             readConfig();
         }
 
-        //Acquiring process level lock on config file
-        new RandomAccessFile(configFile,"rw").getChannel().tryLock();
+        //Acquiring process level lock on temp file
+        new RandomAccessFile(new File(GetPropertyAction.privilegedGetProperty("java.io.tmpdir"),Constants.TEMP_FILE),"rw").getChannel().tryLock();
     }
 
     private void readConfig() throws IOException {
         log.info("Reading timeout value from config file");
         BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(configFile.toPath())));
         timeout = Integer.parseInt(reader.readLine());
+        reader.close();
     }
 
     public void updateConfig(String timeoutValue) throws IOException {
@@ -57,6 +59,7 @@ public class Configuration{
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(configFile.toPath())));
         writer.write(timeoutValue);
         writer.flush();
+        writer.close();
         readConfig();
     }
 
