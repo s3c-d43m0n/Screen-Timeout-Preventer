@@ -32,6 +32,7 @@ public class Menu extends PopupMenu {
                     try {
                         Integer.parseInt(value);
                         Configuration.getConfig().updateConfig(value);
+                        value=null;
                     } catch (NumberFormatException ex){
                         log.warning(ex.getLocalizedMessage());
                         JOptionPane.showMessageDialog(
