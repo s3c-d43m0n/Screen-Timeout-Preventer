@@ -5,6 +5,11 @@ plugins {
 group 'com.ritvik.tools'
 version 'SNAPSHOT'
 
+java {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
+
 repositories {
     mavenCentral()
 }
