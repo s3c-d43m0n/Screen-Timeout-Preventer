@@ -11,35 +11,36 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.util.logging.Logger;
 
-public class Configuration{
-    private final File configFile;
-    private int timeout;
-
+public class Configuration {
     private static final Logger log = Logger.getLogger(Configuration.class.getName());
     private static Configuration configurationInstance;
-    static{
+
+    static {
         try {
             configurationInstance = new Configuration();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
 
-    public static Configuration getConfig() {
-        return configurationInstance;
-    }
+    private final File configFile;
+    private int timeout;
 
     public Configuration() throws IOException {
         configFile = new File(System.getProperty(Constants.HOME_DIR), Constants.CONFIG_FILE);
 
         //Checking if new config file is needed
-        if(!configFile.exists()){
-            log.info("Config file not present : "+configFile.getAbsolutePath());
+        if (!configFile.exists()) {
+            log.info("Config file not present : " + configFile.getAbsolutePath());
             updateConfig(Constants.DEFAULT_TIMEOUT);
         } else {
             readConfig();
         }
+    }
+
+    public static Configuration getConfig() {
+        return configurationInstance;
     }
 
     private void readConfig() throws IOException {
@@ -48,13 +49,13 @@ public class Configuration{
         try {
             timeout = Integer.parseInt(reader.readLine());
             reader.close();
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             updateConfig(Constants.DEFAULT_TIMEOUT);
         }
     }
 
     public void updateConfig(String timeoutValue) throws IOException {
-        log.info("Writing timeout value "+timeoutValue+"to config file");
+        log.info("Writing timeout value " + timeoutValue + " to config file");
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(configFile.toPath())));
         writer.write(timeoutValue);
         writer.flush();

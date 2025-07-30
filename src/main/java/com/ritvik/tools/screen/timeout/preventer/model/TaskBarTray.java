@@ -9,8 +9,8 @@ import java.awt.TrayIcon;
 public class TaskBarTray extends TrayIcon {
 
     public TaskBarTray(Image image) {
-        super(image,Constants.APP_NAME);
-        this.setPopupMenu(new Menu(this, new ImageIcon(image,Constants.APP_NAME)));
+        super(image, Constants.APP_NAME);
+        this.setPopupMenu(new Menu(this, new ImageIcon(image, Constants.APP_NAME)));
         setImageAutoSize(true);
     }
 }

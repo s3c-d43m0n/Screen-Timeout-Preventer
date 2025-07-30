@@ -11,10 +11,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class BackendService extends Thread implements Runnable{
+public class BackendService extends Thread implements Runnable {
+    private final static Logger log = Logger.getLogger(BackendService.class.getName());
     private final Configuration configuration = Configuration.getConfig();
     private final ScheduledExecutorService executorService;
-    private final static Logger log = Logger.getLogger(BackendService.class.getName());
 
     public BackendService() {
         this.setName(this.getClass().getName());

@@ -8,12 +8,13 @@ import java.util.logging.Logger;
 
 public class Emulator implements Callable<Boolean> {
 
-    private final Robot robot;
     private static final Logger log = Logger.getLogger(Emulator.class.getName());
+    private final Robot robot;
 
-    public Emulator(Robot robot){
+    public Emulator(Robot robot) {
         this.robot = robot;
     }
+
     @Override
     public Boolean call() {
         log.info("Executing Keyboard Emulator Event");

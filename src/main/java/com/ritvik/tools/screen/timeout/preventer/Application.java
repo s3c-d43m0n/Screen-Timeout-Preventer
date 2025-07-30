@@ -8,7 +8,7 @@ public class Application {
         try {
             new BackendService().start();
             new UserInterface().start();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
